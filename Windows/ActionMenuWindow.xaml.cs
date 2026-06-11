@@ -11,6 +11,7 @@ namespace Clap.Windows;
 public partial class ActionMenuWindow : Window
 {
     private readonly CaptureResult _capture;
+    private bool _closing;
 
     public event Action<ClapAction>? ActionSelected;
 
@@ -90,6 +91,10 @@ public partial class ActionMenuWindow : Window
         button.Click += (_, _) =>
         {
             var selected = (ClapAction)button.Tag;
+            // Close() löst zuerst OnDeactivated aus (Fokus geht weg) – das würde
+            // erneut Close() rufen und WPF wirft InvalidOperationException
+            // ("Window wird bereits geschlossen"). Mit dem Flag fangen wir das ab.
+            _closing = true;
             Close();
             ActionSelected?.Invoke(selected);
         };
@@ -116,11 +121,20 @@ public partial class ActionMenuWindow : Window
         Activate();
     }
 
-    private void OnDeactivated(object? sender, EventArgs e) => Close();
+    private void OnDeactivated(object? sender, EventArgs e)
+    {
+        if (_closing) return;
+        _closing = true;
+        Close();
+    }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Escape) Close();
+        if (e.Key == Key.Escape && !_closing)
+        {
+            _closing = true;
+            Close();
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]

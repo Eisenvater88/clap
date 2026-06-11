@@ -8,6 +8,7 @@ namespace Clap;
 public partial class App : Application
 {
     private Mutex? _singleInstanceMutex;
+    private bool _ownsMutex;
     private SettingsService _settingsService = null!;
     private OllamaService _aiService = null!;
     private TrayIconService? _trayIcon;
@@ -18,6 +19,7 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         _singleInstanceMutex = new Mutex(initiallyOwned: true, "Clap_SingleInstance", out var isFirstInstance);
+        _ownsMutex = isFirstInstance;
         if (!isFirstInstance)
         {
             Shutdown();
@@ -25,6 +27,24 @@ public partial class App : Application
         }
 
         base.OnStartup(e);
+
+        // Globale Auffanglinie: lieber eine Meldung als Absturz im Tray-Betrieb.
+        DispatcherUnhandledException += (_, args) =>
+        {
+            _trayIcon?.ShowNotification("Clap – unerwarteter Fehler",
+                args.Exception.Message, isError: true);
+            args.Handled = true;
+        };
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            if (args.ExceptionObject is Exception ex)
+                _trayIcon?.ShowNotification("Clap – unerwarteter Fehler",
+                    ex.Message, isError: true);
+        };
+        TaskScheduler.UnobservedTaskException += (_, args) =>
+        {
+            args.SetObserved();
+        };
 
         _settingsService = SettingsService.Load();
         _aiService = new OllamaService(_settingsService);
@@ -157,7 +177,11 @@ public partial class App : Application
     {
         _hotkeyService?.Dispose();
         _trayIcon?.Dispose();
-        _singleInstanceMutex?.ReleaseMutex();
+        if (_ownsMutex)
+        {
+            try { _singleInstanceMutex?.ReleaseMutex(); }
+            catch (ApplicationException) { /* z. B. wenn der Mutex auf einem anderen Thread besessen wird */ }
+        }
         _singleInstanceMutex?.Dispose();
         base.OnExit(e);
     }

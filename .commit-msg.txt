@@ -1,0 +1,24 @@
+Absturz beim Klick auf Aktion und Mutex-Fehler beheben
+
+Bug 1 (der Absturz beim Auswaehlen einer Aktion):
+ActionMenuWindow rief im Button-Click zuerst Close auf. Sobald das
+Fenster die Aktivierung verlor (z. B. an das gleich erscheinende
+ResultWindow), feuerte OnDeactivated und rief erneut Close auf, was
+WPF mit InvalidOperationException quittierte ("Window wird bereits
+geschlossen"). Wir merken uns das geschlossene Fenster nun mit einem
+Flag, OnDeactivated und Escape pruefen es.
+
+Bug 2: App.OnExit rief Mutex.ReleaseMutex auch dann auf, wenn die
+Instanz den Mutex nicht besass (Single-Instance-Pfad), was beim
+Beenden der Zweitinstanz eine ApplicationException ausloeste. Der
+Aufruf ist jetzt an ein Ownership-Flag gebunden und im try/catch.
+
+Zusaetzlich: globale DispatcherUnhandledException und
+AppDomain.UnhandledException werden abgefangen und als Tray-
+Benachrichtigung angezeigt, damit kuenftige unerwartete Fehler
+keine Abstuerze mehr verursachen.
+
+Verifiziert: programmatische Klick-Reproduktion des Translate-Buttons
+loest mit den Fixes keine DispatcherUnhandledException mehr aus.
+
+Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
