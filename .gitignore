@@ -3,3 +3,4 @@ obj/
 *.user
 .vs/
 .claude/settings.local.json
+.commit-msg.txt
