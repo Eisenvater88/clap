@@ -7,17 +7,23 @@
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="True">
     <StackPanel Margin="20">
-        <TextBlock Text="Anthropic API-Key" FontWeight="SemiBold" Margin="0,0,0,4"/>
-        <PasswordBox x:Name="ApiKeyBox" Padding="6" Margin="0,0,0,2"/>
-        <TextBlock x:Name="ApiKeyHint" Foreground="Gray" FontSize="11" Margin="0,0,0,14"
-                   Text="Der Key wird verschlüsselt (DPAPI) lokal gespeichert."/>
+        <TextBlock Text="Ollama-Server" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <DockPanel Margin="0,0,0,2">
+            <Button x:Name="TestButton" Content="Verbinden" Click="OnTestClick"
+                    DockPanel.Dock="Right" Padding="12,4" Margin="8,0,0,0"/>
+            <TextBox x:Name="UrlBox" Padding="6"/>
+        </DockPanel>
+        <TextBlock x:Name="ConnectionHint" Foreground="Gray" FontSize="11" Margin="0,0,0,14"
+                   Text="Lokal üblich: http://localhost:11434" TextWrapping="Wrap"/>
 
-        <TextBlock Text="Modell" FontWeight="SemiBold" Margin="0,0,0,4"/>
-        <ComboBox x:Name="ModelBox" Padding="6" Margin="0,0,0,14">
-            <ComboBoxItem Tag="claude-opus-4-8" Content="Claude Opus 4.8 – beste Qualität"/>
-            <ComboBoxItem Tag="claude-sonnet-4-6" Content="Claude Sonnet 4.6 – ausgewogen"/>
-            <ComboBoxItem Tag="claude-haiku-4-5" Content="Claude Haiku 4.5 – am schnellsten"/>
-        </ComboBox>
+        <TextBlock Text="Textmodell (Übersetzen, Zusammenfassen, Erklären, Umformulieren)"
+                   FontWeight="SemiBold" Margin="0,0,0,4" TextWrapping="Wrap"/>
+        <ComboBox x:Name="ModelBox" IsEditable="True" Padding="6" Margin="0,0,0,14"/>
+
+        <TextBlock Text="Vision-Modell (Bildanalyse, optional)" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <ComboBox x:Name="VisionModelBox" IsEditable="True" Padding="6" Margin="0,0,0,2"/>
+        <TextBlock Foreground="Gray" FontSize="11" Margin="0,0,0,14" TextWrapping="Wrap"
+                   Text="Leer lassen, um die Bildanalyse zu deaktivieren. Vision-Modell zuvor per &quot;ollama pull llava&quot; laden."/>
 
         <TextBlock Text="Standard-Zielsprache (Übersetzen)" FontWeight="SemiBold" Margin="0,0,0,4"/>
         <ComboBox x:Name="LanguageBox" Padding="6" Margin="0,0,0,14">

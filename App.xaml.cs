@@ -9,7 +9,7 @@ public partial class App : Application
 {
     private Mutex? _singleInstanceMutex;
     private SettingsService _settingsService = null!;
-    private ClaudeService _claudeService = null!;
+    private OllamaService _aiService = null!;
     private TrayIconService? _trayIcon;
     private HotkeyService? _hotkeyService;
     private SettingsWindow? _settingsWindow;
@@ -27,7 +27,7 @@ public partial class App : Application
         base.OnStartup(e);
 
         _settingsService = SettingsService.Load();
-        _claudeService = new ClaudeService(_settingsService);
+        _aiService = new OllamaService(_settingsService);
 
         _trayIcon = new TrayIconService();
         _trayIcon.SettingsRequested += ShowSettings;
@@ -38,7 +38,7 @@ public partial class App : Application
         RegisterHotkey();
         _settingsService.SettingsChanged += RegisterHotkey;
 
-        if (!_claudeService.IsConfigured)
+        if (!_aiService.IsConfigured)
         {
             ShowSettings();
         }
@@ -46,6 +46,7 @@ public partial class App : Application
         {
             _trayIcon.ShowNotification("Clap ist bereit",
                 $"Text markieren und {activeHotkey} drücken, um den KI-Assistenten zu öffnen.");
+            _ = CheckServerAsync();
         }
 
         // Nach dem Start ungenutzten Speicher freigeben (Hintergrund-Betrieb)
@@ -57,7 +58,7 @@ public partial class App : Application
     {
         if (_trayIcon is null || _trayIcon.IsPaused || _captureInProgress) return;
 
-        if (!_claudeService.IsConfigured)
+        if (!_aiService.IsConfigured)
         {
             ShowSettings();
             return;
@@ -74,7 +75,16 @@ public partial class App : Application
                 return;
             }
 
-            var menu = new ActionMenuWindow(capture, _settingsService.Settings.TargetLanguage);
+            // Nur ein Bild, aber kein Vision-Modell → keine anwendbare Aktion
+            if (!capture.HasText && capture.HasImage && !_aiService.HasVisionModel)
+            {
+                _trayIcon.ShowNotification("Clap",
+                    "Für die Bildanalyse ist kein Vision-Modell konfiguriert. Bitte in den Einstellungen " +
+                    "ein Modell wie \"llava\" hinterlegen (zuvor per \"ollama pull llava\" laden).");
+                return;
+            }
+
+            var menu = new ActionMenuWindow(capture, _settingsService.Settings.TargetLanguage, _aiService.HasVisionModel);
             menu.ActionSelected += action => ShowResult(action, capture);
             menu.Show();
         }
@@ -112,9 +122,21 @@ public partial class App : Application
         }
     }
 
+    private async Task CheckServerAsync()
+    {
+        if (_trayIcon is null) return;
+        var models = await _aiService.GetModelsAsync();
+        if (models.Count == 0)
+        {
+            _trayIcon.ShowNotification("Clap",
+                $"Der Ollama-Server unter {_settingsService.Settings.OllamaUrl} ist nicht erreichbar. " +
+                "Bitte Ollama starten oder die URL in den Einstellungen prüfen.", isError: true);
+        }
+    }
+
     private void ShowResult(ClapAction action, CaptureResult capture)
     {
-        var window = new ResultWindow(_claudeService, action, capture);
+        var window = new ResultWindow(_aiService, action, capture);
         window.Show();
         window.Activate();
     }

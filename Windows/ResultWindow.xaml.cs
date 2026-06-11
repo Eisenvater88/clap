@@ -9,15 +9,15 @@ namespace Clap.Windows;
 /// <summary>Zeigt das KI-Ergebnis als Live-Stream an.</summary>
 public partial class ResultWindow : Window
 {
-    private readonly ClaudeService _claude;
+    private readonly OllamaService _ai;
     private readonly ClapAction _action;
     private readonly CaptureResult _capture;
     private readonly CancellationTokenSource _cts = new();
 
-    public ResultWindow(ClaudeService claude, ClapAction action, CaptureResult capture)
+    public ResultWindow(OllamaService ai, ClapAction action, CaptureResult capture)
     {
         InitializeComponent();
-        _claude = claude;
+        _ai = ai;
         _action = action;
         _capture = capture;
 
@@ -35,7 +35,7 @@ public partial class ResultWindow : Window
         var stopwatch = Stopwatch.StartNew();
         try
         {
-            await foreach (var chunk in _claude.StreamAsync(_action, _capture, _cts.Token))
+            await foreach (var chunk in _ai.StreamAsync(_action, _capture, _cts.Token))
             {
                 OutputBox.AppendText(chunk);
                 OutputBox.ScrollToEnd();

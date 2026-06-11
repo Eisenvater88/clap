@@ -14,7 +14,7 @@ public partial class ActionMenuWindow : Window
 
     public event Action<ClapAction>? ActionSelected;
 
-    public ActionMenuWindow(CaptureResult capture, string defaultTargetLanguage)
+    public ActionMenuWindow(CaptureResult capture, string defaultTargetLanguage, bool visionAvailable)
     {
         InitializeComponent();
         _capture = capture;
@@ -39,7 +39,8 @@ public partial class ActionMenuWindow : Window
             AddItem(new ClapAction(ClapActionKind.Rephrase, "prägnant"));
         }
 
-        if (capture.HasImage)
+        // Bildanalyse nur anbieten, wenn ein Vision-Modell konfiguriert ist
+        if (capture.HasImage && visionAvailable)
         {
             AddSection("Bild");
             AddItem(new ClapAction(ClapActionKind.AnalyzeImage));

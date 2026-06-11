@@ -1,6 +1,4 @@
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using Clap.Models;
 
@@ -31,6 +29,12 @@ public sealed class SettingsService
             // Defekte Datei → mit Defaults starten
             service.Settings = new();
         }
+
+        // Migration: ein alter Anthropic-Modellname ist für Ollama ungültig → zurücksetzen,
+        // damit beim ersten Start ein lokales Modell ausgewählt wird.
+        if (service.Settings.Model.StartsWith("claude", StringComparison.OrdinalIgnoreCase))
+            service.Settings.Model = "";
+
         return service;
     }
 
@@ -39,26 +43,5 @@ public sealed class SettingsService
         Directory.CreateDirectory(SettingsDir);
         File.WriteAllText(SettingsPath, JsonSerializer.Serialize(Settings, new JsonSerializerOptions { WriteIndented = true }));
         SettingsChanged?.Invoke();
-    }
-
-    public string? GetApiKey()
-    {
-        if (string.IsNullOrEmpty(Settings.ApiKeyProtected)) return null;
-        try
-        {
-            var protectedBytes = Convert.FromBase64String(Settings.ApiKeyProtected);
-            var bytes = ProtectedData.Unprotect(protectedBytes, null, DataProtectionScope.CurrentUser);
-            return Encoding.UTF8.GetString(bytes);
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    public void SetApiKey(string apiKey)
-    {
-        var bytes = ProtectedData.Protect(Encoding.UTF8.GetBytes(apiKey), null, DataProtectionScope.CurrentUser);
-        Settings.ApiKeyProtected = Convert.ToBase64String(bytes);
     }
 }

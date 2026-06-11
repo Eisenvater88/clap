@@ -18,9 +18,6 @@
     <Using Remove="System.Drawing" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Anthropic" Version="12.29.0" />
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
-  </ItemGroup>
+  <!-- Keine externen Pakete: Ollama wird per HttpClient + System.Text.Json (im .NET-Framework enthalten) angesprochen. -->
 
 </Project>

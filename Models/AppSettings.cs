@@ -2,11 +2,21 @@ namespace Clap.Models;
 
 public sealed class AppSettings
 {
-    /// <summary>API-Key, per DPAPI (CurrentUser) verschlüsselt und Base64-kodiert.</summary>
-    public string? ApiKeyProtected { get; set; }
+    /// <summary>Basis-URL des Ollama-Servers (lokal oder im Netz erreichbar).</summary>
+    public string OllamaUrl { get; set; } = "http://localhost:11434";
 
-    /// <summary>Claude-Modell-ID, z. B. "claude-opus-4-8".</summary>
-    public string Model { get; set; } = "claude-opus-4-8";
+    /// <summary>Ollama-Textmodell für Übersetzen/Zusammenfassen/Erklären/Umformulieren, z. B. "qwen3:4b".</summary>
+    public string Model { get; set; } = "";
+
+    /// <summary>Optionales Vision-Modell für die Bildanalyse, z. B. "llava". Leer = Bildanalyse deaktiviert.</summary>
+    public string VisionModel { get; set; } = "";
+
+    /// <summary>
+    /// Kontextfenster (Tokens). Begrenzt den Speicherbedarf — das riesige Standard-Fenster
+    /// mancher Modelle (z. B. qwen3) sprengt sonst den Arbeitsspeicher. Höher = mehr Text,
+    /// aber mehr RAM. 8192 ist ein sicherer Standard für ~16 GB-Maschinen.
+    /// </summary>
+    public int NumCtx { get; set; } = 8192;
 
     /// <summary>Standard-Zielsprache für Übersetzungen.</summary>
     public string TargetLanguage { get; set; } = "Deutsch";

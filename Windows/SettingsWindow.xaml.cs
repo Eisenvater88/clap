@@ -7,18 +7,20 @@ namespace Clap.Windows;
 public partial class SettingsWindow : Window
 {
     private readonly SettingsService _settingsService;
+    private readonly OllamaService _ai;
 
     public SettingsWindow(SettingsService settingsService)
     {
         InitializeComponent();
         _settingsService = settingsService;
+        _ai = new OllamaService(settingsService);
 
         var settings = settingsService.Settings;
 
-        if (!string.IsNullOrEmpty(settingsService.GetApiKey()))
-            ApiKeyHint.Text = "Ein API-Key ist hinterlegt. Feld leer lassen, um ihn zu behalten.";
+        UrlBox.Text = settings.OllamaUrl;
+        ModelBox.Text = settings.Model;
+        VisionModelBox.Text = settings.VisionModel;
 
-        SelectByTag(ModelBox, settings.Model);
         SelectByContent(LanguageBox, settings.TargetLanguage);
 
         foreach (var option in HotkeyService.Options)
@@ -26,15 +28,45 @@ public partial class SettingsWindow : Window
         SelectByContent(HotkeyBox, settings.Hotkey);
 
         AutostartBox.IsChecked = settings.Autostart;
+
+        Loaded += async (_, _) => await LoadModelsAsync();
     }
 
-    private static void SelectByTag(ComboBox box, string tag)
+    /// <summary>Lädt die auf dem Server installierten Modelle in die Auswahlfelder.</summary>
+    private async Task LoadModelsAsync()
     {
-        box.SelectedIndex = 0;
-        foreach (ComboBoxItem item in box.Items)
+        // Aktuelle URL zur Abfrage verwenden
+        _settingsService.Settings.OllamaUrl = UrlBox.Text.Trim();
+
+        var models = await _ai.GetModelsAsync();
+
+        var currentModel = ModelBox.Text;
+        var currentVision = VisionModelBox.Text;
+
+        ModelBox.Items.Clear();
+        VisionModelBox.Items.Clear();
+        VisionModelBox.Items.Add(new ComboBoxItem { Content = "" }); // „kein Vision-Modell"
+        foreach (var model in models)
         {
-            if ((string)item.Tag == tag) { box.SelectedItem = item; return; }
+            ModelBox.Items.Add(model);
+            VisionModelBox.Items.Add(model);
         }
+
+        // Bisherige Auswahl beibehalten; sonst erstes verfügbares Textmodell vorschlagen
+        ModelBox.Text = !string.IsNullOrWhiteSpace(currentModel) ? currentModel
+            : models.FirstOrDefault() ?? "";
+        VisionModelBox.Text = currentVision;
+
+        if (models.Count > 0)
+            ConnectionHint.Text = $"Verbunden – {models.Count} Modell(e) gefunden.";
+        else
+            ConnectionHint.Text = "Keine Verbindung / keine Modelle. Läuft Ollama unter dieser URL?";
+    }
+
+    private async void OnTestClick(object sender, RoutedEventArgs e)
+    {
+        ConnectionHint.Text = "Verbinde…";
+        await LoadModelsAsync();
     }
 
     private static void SelectByContent(ComboBox box, string content)
@@ -50,18 +82,25 @@ public partial class SettingsWindow : Window
     {
         var settings = _settingsService.Settings;
 
-        var enteredKey = ApiKeyBox.Password.Trim();
-        if (enteredKey.Length > 0)
-            _settingsService.SetApiKey(enteredKey);
-
-        if (string.IsNullOrEmpty(_settingsService.GetApiKey()))
+        var url = UrlBox.Text.Trim();
+        if (url.Length == 0)
         {
-            MessageBox.Show(this, "Bitte einen Anthropic API-Key eingeben.", "Clap",
+            MessageBox.Show(this, "Bitte die URL des Ollama-Servers angeben.", "Clap",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
-        settings.Model = (string)((ComboBoxItem)ModelBox.SelectedItem).Tag;
+        var model = ModelBox.Text.Trim();
+        if (model.Length == 0)
+        {
+            MessageBox.Show(this, "Bitte ein Textmodell auswählen oder eingeben.", "Clap",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        settings.OllamaUrl = url;
+        settings.Model = model;
+        settings.VisionModel = VisionModelBox.Text.Trim();
         settings.TargetLanguage = (string)((ComboBoxItem)LanguageBox.SelectedItem).Content;
         settings.Hotkey = (string)((ComboBoxItem)HotkeyBox.SelectedItem).Content;
         settings.Autostart = AutostartBox.IsChecked == true;
