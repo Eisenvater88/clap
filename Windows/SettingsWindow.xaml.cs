@@ -20,6 +20,11 @@ public partial class SettingsWindow : Window
 
         SelectByTag(ModelBox, settings.Model);
         SelectByContent(LanguageBox, settings.TargetLanguage);
+
+        foreach (var option in HotkeyService.Options)
+            HotkeyBox.Items.Add(new ComboBoxItem { Content = option.Name });
+        SelectByContent(HotkeyBox, settings.Hotkey);
+
         AutostartBox.IsChecked = settings.Autostart;
     }
 
@@ -58,6 +63,7 @@ public partial class SettingsWindow : Window
 
         settings.Model = (string)((ComboBoxItem)ModelBox.SelectedItem).Tag;
         settings.TargetLanguage = (string)((ComboBoxItem)LanguageBox.SelectedItem).Content;
+        settings.Hotkey = (string)((ComboBoxItem)HotkeyBox.SelectedItem).Content;
         settings.Autostart = AutostartBox.IsChecked == true;
 
         try

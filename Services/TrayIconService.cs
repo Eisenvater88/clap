@@ -17,6 +17,8 @@ public sealed class TrayIconService : IDisposable
 
     public bool IsPaused { get; private set; }
 
+    private string _hotkeyText = "kein Shortcut aktiv";
+
     public TrayIconService()
     {
         _activeIcon = CreateIcon(Color.FromArgb(230, 126, 34));
@@ -40,21 +42,35 @@ public sealed class TrayIconService : IDisposable
         _notifyIcon = new Forms.NotifyIcon
         {
             Icon = _activeIcon,
-            Text = "Clap – KI-Assistent (aktiv) — Strg+Win+C",
             Visible = true,
             ContextMenuStrip = menu,
         };
         _notifyIcon.DoubleClick += (_, _) => SettingsRequested?.Invoke();
+        UpdateTooltip();
+    }
+
+    /// <summary>Zeigt den tatsächlich registrierten Shortcut im Tooltip an.</summary>
+    public void SetHotkeyText(string? hotkey)
+    {
+        _hotkeyText = hotkey ?? "kein Shortcut aktiv";
+        UpdateTooltip();
     }
 
     private void SetPaused(bool paused)
     {
         IsPaused = paused;
         _notifyIcon.Icon = paused ? _pausedIcon : _activeIcon;
-        _notifyIcon.Text = paused
-            ? "Clap – KI-Assistent (pausiert)"
-            : "Clap – KI-Assistent (aktiv) — Strg+Win+C";
+        UpdateTooltip();
         PausedChanged?.Invoke(paused);
+    }
+
+    private void UpdateTooltip()
+    {
+        // NotifyIcon.Text ist auf 63 Zeichen begrenzt
+        var text = IsPaused
+            ? "Clap – KI-Assistent (pausiert)"
+            : $"Clap – KI-Assistent — {_hotkeyText}";
+        _notifyIcon.Text = text.Length <= 63 ? text : text[..63];
     }
 
     public void ShowNotification(string title, string message, bool isError = false)

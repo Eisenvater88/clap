@@ -11,5 +11,8 @@ public sealed class AppSettings
     /// <summary>Standard-Zielsprache für Übersetzungen.</summary>
     public string TargetLanguage { get; set; } = "Deutsch";
 
+    /// <summary>Bevorzugter globaler Shortcut (Name aus HotkeyService.Options).</summary>
+    public string Hotkey { get; set; } = "Strg+Win+C";
+
     public bool Autostart { get; set; } = true;
 }

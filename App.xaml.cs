@@ -35,21 +35,17 @@ public partial class App : Application
 
         _hotkeyService = new HotkeyService();
         _hotkeyService.HotkeyPressed += OnHotkeyPressed;
-        if (!_hotkeyService.Register())
-        {
-            _trayIcon.ShowNotification("Clap",
-                "Der Shortcut Strg+Win+C konnte nicht registriert werden – er wird " +
-                "möglicherweise von einer anderen Anwendung verwendet.", isError: true);
-        }
+        RegisterHotkey();
+        _settingsService.SettingsChanged += RegisterHotkey;
 
         if (!_claudeService.IsConfigured)
         {
             ShowSettings();
         }
-        else
+        else if (_hotkeyService.ActiveHotkeyName is { } activeHotkey)
         {
             _trayIcon.ShowNotification("Clap ist bereit",
-                "Text markieren und Strg+Win+C drücken, um den KI-Assistenten zu öffnen.");
+                $"Text markieren und {activeHotkey} drücken, um den KI-Assistenten zu öffnen.");
         }
 
         // Nach dem Start ungenutzten Speicher freigeben (Hintergrund-Betrieb)
@@ -89,6 +85,30 @@ public partial class App : Application
         finally
         {
             _captureInProgress = false;
+        }
+    }
+
+    private void RegisterHotkey()
+    {
+        if (_hotkeyService is null || _trayIcon is null) return;
+
+        var preferred = _settingsService.Settings.Hotkey;
+        if (_hotkeyService.Register(preferred))
+        {
+            _trayIcon.SetHotkeyText(_hotkeyService.ActiveHotkeyName);
+            if (_hotkeyService.ActiveHotkeyName != preferred)
+            {
+                _trayIcon.ShowNotification("Clap",
+                    $"{preferred} ist auf diesem System bereits belegt (z. B. durch Windows). " +
+                    $"Clap verwendet stattdessen {_hotkeyService.ActiveHotkeyName}.");
+            }
+        }
+        else
+        {
+            _trayIcon.SetHotkeyText(null);
+            _trayIcon.ShowNotification("Clap",
+                "Es konnte kein globaler Shortcut registriert werden – alle Varianten sind belegt.",
+                isError: true);
         }
     }
 

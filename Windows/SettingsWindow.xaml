@@ -26,6 +26,12 @@
             <ComboBoxItem Content="Tschechisch"/>
         </ComboBox>
 
+        <TextBlock Text="Shortcut" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <ComboBox x:Name="HotkeyBox" Padding="6" Margin="0,0,0,2"/>
+        <TextBlock Foreground="Gray" FontSize="11" Margin="0,0,0,14"
+                   Text="Ist der Shortcut belegt (Windows reserviert z. B. Strg+Win+C teils für Farbfilter), weicht Clap automatisch auf eine Alternative aus."
+                   TextWrapping="Wrap"/>
+
         <CheckBox x:Name="AutostartBox" Content="Automatisch mit Windows starten" Margin="0,0,0,18"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

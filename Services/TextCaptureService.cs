@@ -31,6 +31,7 @@ public static class TextCaptureService
         // 2. Vom Nutzer noch gehaltene Modifier lösen, dann Strg+C senden
         SendKeyUp(VkLWin);
         SendKeyUp(VkRWin);
+        SendKeyUp(VkMenu);
         SendKeyUp(VkControl);
         await Task.Delay(30);
         SendCtrlC();
@@ -113,6 +114,7 @@ public static class TextCaptureService
     #region Win32 SendInput
 
     private const ushort VkControl = 0x11;
+    private const ushort VkMenu = 0x12; // Alt
     private const ushort VkLWin = 0x5B;
     private const ushort VkRWin = 0x5C;
     private const ushort VkC = 0x43;
