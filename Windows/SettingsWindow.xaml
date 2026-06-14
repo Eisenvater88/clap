@@ -5,43 +5,45 @@
         Width="460" SizeToContent="Height"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        ShowInTaskbar="True">
+        ShowInTaskbar="True"
+        Background="{StaticResource WindowBgBrush}"
+        TextOptions.TextFormattingMode="Display">
     <StackPanel Margin="20">
-        <TextBlock Text="Ollama-Server" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <TextBlock Text="Ollama-Server" Style="{StaticResource Heading}"/>
         <DockPanel Margin="0,0,0,2">
             <Button x:Name="TestButton" Content="Verbinden" Click="OnTestClick"
                     DockPanel.Dock="Right" Padding="12,4" Margin="8,0,0,0"/>
-            <TextBox x:Name="UrlBox" Padding="6"/>
+            <TextBox x:Name="UrlBox"/>
         </DockPanel>
-        <TextBlock x:Name="ConnectionHint" Foreground="Gray" FontSize="11" Margin="0,0,0,14"
-                   Text="Lokal üblich: http://localhost:11434" TextWrapping="Wrap"/>
+        <TextBlock x:Name="ConnectionHint" Style="{StaticResource Caption}" Margin="0,0,0,14"
+                   Text="Lokal üblich: http://localhost:11434"/>
 
         <TextBlock Text="Textmodell (Übersetzen, Zusammenfassen, Erklären, Umformulieren)"
-                   FontWeight="SemiBold" Margin="0,0,0,4" TextWrapping="Wrap"/>
-        <ComboBox x:Name="ModelBox" IsEditable="True" Padding="6" Margin="0,0,0,14"/>
+                   Style="{StaticResource Heading}"/>
+        <ComboBox x:Name="ModelBox" IsEditable="True" Margin="0,0,0,14"/>
 
-        <TextBlock Text="Vision-Modell (Bildanalyse, optional)" FontWeight="SemiBold" Margin="0,0,0,4"/>
-        <ComboBox x:Name="VisionModelBox" IsEditable="True" Padding="6" Margin="0,0,0,2"/>
-        <TextBlock Foreground="Gray" FontSize="11" Margin="0,0,0,14" TextWrapping="Wrap"
+        <TextBlock Text="Vision-Modell (Bildanalyse, optional)" Style="{StaticResource Heading}"/>
+        <ComboBox x:Name="VisionModelBox" IsEditable="True" Margin="0,0,0,2"/>
+        <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,14"
                    Text="Leer lassen, um die Bildanalyse zu deaktivieren. Vision-Modell zuvor per &quot;ollama pull llava&quot; laden."/>
 
-        <TextBlock Text="Standard-Zielsprache (Übersetzen)" FontWeight="SemiBold" Margin="0,0,0,4"/>
-        <ComboBox x:Name="LanguageBox" Padding="6" Margin="0,0,0,14">
+        <TextBlock Text="Standard-Zielsprache (Übersetzen)" Style="{StaticResource Heading}"/>
+        <ComboBox x:Name="LanguageBox" Margin="0,0,0,14">
             <ComboBoxItem Content="Deutsch"/>
             <ComboBoxItem Content="Englisch"/>
             <ComboBoxItem Content="Tschechisch"/>
         </ComboBox>
 
-        <TextBlock Text="Shortcut" FontWeight="SemiBold" Margin="0,0,0,4"/>
-        <ComboBox x:Name="HotkeyBox" Padding="6" Margin="0,0,0,2"/>
-        <TextBlock Foreground="Gray" FontSize="11" Margin="0,0,0,14"
-                   Text="Ist der Shortcut belegt (Windows reserviert z. B. Strg+Win+C teils für Farbfilter), weicht Clap automatisch auf eine Alternative aus."
-                   TextWrapping="Wrap"/>
+        <TextBlock Text="Shortcut" Style="{StaticResource Heading}"/>
+        <ComboBox x:Name="HotkeyBox" Margin="0,0,0,2"/>
+        <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,14"
+                   Text="Ist der Shortcut belegt (Windows reserviert z. B. Strg+Win+C teils für Farbfilter), weicht Clap automatisch auf eine Alternative aus."/>
 
         <CheckBox x:Name="AutostartBox" Content="Automatisch mit Windows starten" Margin="0,0,0,18"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Speichern" Click="OnSaveClick" Padding="16,6" Margin="0,0,8,0" IsDefault="True"/>
+            <Button Content="Speichern" Click="OnSaveClick" Style="{StaticResource AccentButton}"
+                    Padding="16,6" Margin="0,0,8,0" IsDefault="True"/>
             <Button Content="Abbrechen" Click="OnCancelClick" Padding="16,6" IsCancel="True"/>
         </StackPanel>
     </StackPanel>

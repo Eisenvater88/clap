@@ -13,13 +13,13 @@
         WindowStartupLocation="Manual"
         Deactivated="OnDeactivated"
         KeyDown="OnKeyDown">
-    <Border Background="#FF2B2B2B" CornerRadius="8" Padding="6"
-            BorderBrush="#FF4A4A4A" BorderThickness="1">
+    <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8" Padding="6"
+            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
         <Border.Effect>
             <DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.5"/>
         </Border.Effect>
         <StackPanel x:Name="ItemsPanel" MinWidth="240">
-            <TextBlock x:Name="HeaderText" Foreground="#FF9E9E9E" FontSize="11"
+            <TextBlock x:Name="HeaderText" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"
                        Margin="8,4,8,6" TextTrimming="CharacterEllipsis" MaxWidth="320"/>
         </StackPanel>
     </Border>
