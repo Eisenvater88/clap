@@ -7,7 +7,8 @@
         WindowStartupLocation="CenterScreen"
         Topmost="True"
         ShowInTaskbar="True"
-        Background="#FF1E1E1E"
+        Background="{StaticResource WindowBgBrush}"
+        TextOptions.TextFormattingMode="Display"
         KeyDown="OnKeyDown">
     <Window.Resources>
         <!-- Indeterminater Spinner: drei animierte Punkte -->
@@ -15,7 +16,7 @@
             <Setter Property="Width" Value="6"/>
             <Setter Property="Height" Value="6"/>
             <Setter Property="Margin" Value="2,0"/>
-            <Setter Property="Fill" Value="#FFE67E22"/>
+            <Setter Property="Fill" Value="{StaticResource AccentBrush}"/>
             <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
         </Style>
     </Window.Resources>
@@ -29,15 +30,15 @@
             <RowDefinition Height="Auto"/> <!-- Buttons -->
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="ActionTitle" Grid.Row="0" Foreground="#FFFFFFFF"
+        <TextBlock x:Name="ActionTitle" Grid.Row="0"
                    FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4"/>
 
-        <Border Grid.Row="1" Background="#FF262626" CornerRadius="4"
+        <Border Grid.Row="1" Background="{StaticResource SurfaceAltBrush}" CornerRadius="4"
                 Padding="10,6" Margin="0,0,0,12">
             <StackPanel>
-                <TextBlock Text="QUELLE" Foreground="#FF7A7A7A"
+                <TextBlock Text="QUELLE" Foreground="{StaticResource TextMutedBrush}"
                            FontSize="10" Margin="0,0,0,2"/>
-                <TextBlock x:Name="SourcePreview" Foreground="#FFBDBDBD"
+                <TextBlock x:Name="SourcePreview" Foreground="{StaticResource TextSecondaryBrush}"
                            FontSize="12" TextTrimming="CharacterEllipsis"
                            MaxHeight="48" TextWrapping="Wrap"/>
             </StackPanel>
@@ -69,35 +70,40 @@
                 </Ellipse>
             </StackPanel>
 
-            <TextBlock x:Name="StatusText" Grid.Column="1" Foreground="#FFEAEAEA"
+            <TextBlock x:Name="StatusText" Grid.Column="1"
                        FontSize="12" VerticalAlignment="Center"
                        Text="Verbinde mit Ollama…"/>
 
-            <TextBlock x:Name="ElapsedText" Grid.Column="2" Foreground="#FF7A7A7A"
+            <TextBlock x:Name="ElapsedText" Grid.Column="2" Foreground="{StaticResource TextMutedBrush}"
                        FontSize="11" VerticalAlignment="Center"/>
         </Grid>
 
         <ProgressBar x:Name="ProgressIndicator" Grid.Row="3"
                      Height="3" IsIndeterminate="True"
-                     Background="#FF2B2B2B" Foreground="#FFE67E22"
-                     BorderThickness="0" Margin="0,0,0,10"/>
+                     Margin="0,0,0,10"/>
 
-        <Border Grid.Row="4" Background="#FF2B2B2B" CornerRadius="6" Padding="2">
+        <Border Grid.Row="4" Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="2">
             <TextBox x:Name="OutputBox"
                      IsReadOnly="True"
                      TextWrapping="Wrap"
                      AcceptsReturn="True"
                      VerticalScrollBarVisibility="Auto"
                      Background="Transparent"
-                     Foreground="#FFEAEAEA"
                      BorderThickness="0"
                      FontSize="14"
-                     Padding="12"/>
+                     Padding="12">
+                <TextBox.Template>
+                    <ControlTemplate TargetType="TextBox">
+                        <ScrollViewer x:Name="PART_ContentHost"/>
+                    </ControlTemplate>
+                </TextBox.Template>
+            </TextBox>
         </Border>
 
         <StackPanel Grid.Row="5" Orientation="Horizontal"
                     HorizontalAlignment="Right" Margin="0,12,0,0">
             <Button x:Name="CopyButton" Content="Kopieren" Click="OnCopyClick"
+                    Style="{StaticResource AccentButton}"
                     Padding="16,6" Margin="0,0,8,0" IsEnabled="False"/>
             <Button x:Name="CloseButton" Content="Abbrechen"
                     Click="OnCloseClick" Padding="16,6"/>

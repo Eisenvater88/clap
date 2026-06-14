@@ -84,9 +84,9 @@ public partial class ResultWindow : Window
 
             _stopwatch.Stop();
             _elapsedTimer.Stop();
+            ElapsedText.Text = $"{_stopwatch.Elapsed.TotalSeconds:0.0} s";
             _completedSuccessfully = true;
-            FinishUi(success: true,
-                $"Fertig – {_stopwatch.Elapsed.TotalSeconds:0.0} s");
+            FinishUi(success: true, "Fertig");
             CopyButton.IsEnabled = OutputBox.Text.Length > 0;
         }
         catch (OperationCanceledException)

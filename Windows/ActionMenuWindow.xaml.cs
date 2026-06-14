@@ -67,9 +67,7 @@ public partial class ActionMenuWindow : Window
         ItemsPanel.Children.Add(new TextBlock
         {
             Text = title.ToUpperInvariant(),
-            Foreground = new SolidColorBrush(Color.FromRgb(0x8A, 0x8A, 0x8A)),
-            FontSize = 10,
-            Margin = new Thickness(8, 8, 8, 2),
+            Style = (Style)Application.Current.Resources["MenuSection"],
         });
     }
 
@@ -79,14 +77,7 @@ public partial class ActionMenuWindow : Window
         {
             Content = action.DisplayName,
             Tag = action,
-            HorizontalContentAlignment = HorizontalAlignment.Left,
-            Padding = new Thickness(10, 6, 10, 6),
-            Margin = new Thickness(2, 1, 2, 1),
-            Background = Brushes.Transparent,
-            Foreground = Brushes.White,
-            BorderThickness = new Thickness(0),
-            FontSize = 13,
-            Cursor = Cursors.Hand,
+            Style = (Style)Application.Current.Resources["MenuItemButton"],
         };
         button.Click += (_, _) =>
         {
@@ -98,8 +89,6 @@ public partial class ActionMenuWindow : Window
             Close();
             ActionSelected?.Invoke(selected);
         };
-        button.MouseEnter += (_, _) => button.Background = new SolidColorBrush(Color.FromRgb(0x40, 0x40, 0x40));
-        button.MouseLeave += (_, _) => button.Background = Brushes.Transparent;
         ItemsPanel.Children.Add(button);
     }
 
