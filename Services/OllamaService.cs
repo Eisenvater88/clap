@@ -230,6 +230,19 @@ public sealed class OllamaService
             _ => throw new ArgumentOutOfRangeException(nameof(action)),
         };
 
+        // Persönlicher Stil-Leitfaden: bewusst NUR beim Umformulieren angehängt,
+        // damit Übersetzungen & Co. neutral bleiben.
+        if (action.Kind == ClapActionKind.Rephrase
+            && !string.IsNullOrWhiteSpace(settings.RephraseStyleGuide))
+        {
+            system +=
+                "\n\nBerücksichtige zusätzlich die folgenden persönlichen Stilvorgaben des Nutzers " +
+                "(bevorzugte Wortwahl, häufig genutzte Formulierungen, zu vermeidende Wörter). " +
+                "Wende sie an, damit der Text persönlicher klingt, solange Bedeutung, Grammatik und " +
+                "Rechtschreibung korrekt bleiben:\n\n" +
+                settings.RephraseStyleGuide.Trim();
+        }
+
         return (settings.Model, system, text, null);
     }
 
