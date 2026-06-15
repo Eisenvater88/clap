@@ -30,6 +30,26 @@ wiederhergestellt — vorhandene Inhalte gehen nicht verloren.
    - **Textmodell** wählen, optional **Vision-Modell**
 4. Optional: Zielsprache, Shortcut und Autostart anpassen
 
+### Persönlicher Stil für Umformulieren (optional)
+
+Im Feld **„Persönlicher Stil (nur beim Umformulieren)"** lässt sich ein eigener
+Stil-Leitfaden als **Markdown** hinterlegen: bevorzugte Wortwahl, häufig genutzte
+Formulierungen und Wörter, die nie verwendet werden sollen. Diese Vorgaben fließen
+**ausschließlich** in die **Umformulieren**-Aktionen ein, damit das Ergebnis
+persönlicher statt generisch klingt – beim Übersetzen, Zusammenfassen, Erklären und
+bei der Bildanalyse bleiben sie wirkungslos.
+
+Beispiel:
+
+```markdown
+# Mein Stil
+- kurze, aktive Sätze
+- bevorzugt: „Servus", „passt", „melde mich"
+- nie nutzen: „diesbezüglich", „seitens", „bezüglich"
+```
+
+Das Feld leer lassen, um den generischen Stil beizubehalten.
+
 ## Einstellungen
 
 | Option | Beschreibung |
@@ -38,6 +58,7 @@ wiederhergestellt — vorhandene Inhalte gehen nicht verloren.
 | Textmodell | Modell für Übersetzen/Zusammenfassen/Erklären/Umformulieren |
 | Vision-Modell | Optional für Bildanalyse; leer = Funktion ausgeblendet |
 | Zielsprache | Standardziel für Übersetzungen (Deutsch / Englisch / Tschechisch) |
+| Persönlicher Stil | Optionaler Markdown-Leitfaden; greift nur beim Umformulieren, leer = generisch |
 | Shortcut | Strg+Win+C / Strg+Alt+C / Strg+Win+Y mit automatischem Fallback |
 | Autostart | Start mit Windows-Login (HKCU-Run-Key, keine Adminrechte nötig) |
 
