@@ -23,6 +23,8 @@ public partial class SettingsWindow : Window
 
         SelectByContent(LanguageBox, settings.TargetLanguage);
 
+        StyleGuideBox.Text = settings.RephraseStyleGuide;
+
         foreach (var option in HotkeyService.Options)
             HotkeyBox.Items.Add(new ComboBoxItem { Content = option.Name });
         SelectByContent(HotkeyBox, settings.Hotkey);
@@ -102,6 +104,7 @@ public partial class SettingsWindow : Window
         settings.Model = model;
         settings.VisionModel = VisionModelBox.Text.Trim();
         settings.TargetLanguage = (string)((ComboBoxItem)LanguageBox.SelectedItem).Content;
+        settings.RephraseStyleGuide = StyleGuideBox.Text.Trim();
         settings.Hotkey = (string)((ComboBoxItem)HotkeyBox.SelectedItem).Content;
         settings.Autostart = AutostartBox.IsChecked == true;
 

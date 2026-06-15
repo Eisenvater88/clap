@@ -21,6 +21,14 @@ public sealed class AppSettings
     /// <summary>Standard-Zielsprache für Übersetzungen.</summary>
     public string TargetLanguage { get; set; } = "Deutsch";
 
+    /// <summary>
+    /// Persönlicher Stil-Leitfaden (Markdown) für die Umformulieren-Aktionen: bevorzugte
+    /// Wortwahl, häufig genutzte Formulierungen, zu vermeidende Wörter. Wird ausschließlich
+    /// beim Umformulieren in den System-Prompt eingebunden – nicht beim Übersetzen,
+    /// Zusammenfassen, Erklären oder bei der Bildanalyse. Leer = generischer Stil.
+    /// </summary>
+    public string RephraseStyleGuide { get; set; } = "";
+
     /// <summary>Bevorzugter globaler Shortcut (Name aus HotkeyService.Options).</summary>
     public string Hotkey { get; set; } = "Strg+Win+C";
 
