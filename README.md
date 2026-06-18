@@ -2,7 +2,8 @@
 
 Clap läuft als Tray-App im Hintergrund. Markierten Text in **jeder Anwendung** per
 Tastenkürzel an ein **lokales Ollama-Modell** übergeben: Übersetzen, Zusammenfassen,
-Erklären, Umformulieren oder Bilder aus der Zwischenablage analysieren. Alle Daten
+Erklären, Rechtschreibung & Grammatik korrigieren, Umformulieren oder Bilder aus der
+Zwischenablage analysieren. Alle Daten
 bleiben auf dem Rechner (bzw. auf dem konfigurierten Ollama-Server) — kein Cloud-Versand.
 
 ## Funktionsweise
@@ -50,12 +51,21 @@ Beispiel:
 
 Das Feld leer lassen, um den generischen Stil beizubehalten.
 
+### Korrigieren vs. Umformulieren
+
+Die Aktion **„Rechtschreibung & Grammatik korrigieren"** ändert ausschließlich
+Rechtschreibung, Grammatik und Zeichensetzung – Wortwahl, Satzbau, Stil, Ton und
+Bedeutung bleiben unangetastet. Ist der Text bereits fehlerfrei, wird er unverändert
+zurückgegeben. Wer den Text bewusst umschreiben lassen möchte, nutzt stattdessen die
+**Umformulieren**-Aktionen. Der persönliche Stil-Leitfaden greift nur beim Umformulieren,
+nicht beim Korrigieren.
+
 ## Einstellungen
 
 | Option | Beschreibung |
 |---|---|
 | Ollama-Server | Basis-URL; lokal oder im Netz (z. B. zentraler Server / VDI-Host) |
-| Textmodell | Modell für Übersetzen/Zusammenfassen/Erklären/Umformulieren |
+| Textmodell | Modell für Übersetzen/Zusammenfassen/Erklären/Korrigieren/Umformulieren |
 | Vision-Modell | Optional für Bildanalyse; leer = Funktion ausgeblendet |
 | Zielsprache | Standardziel für Übersetzungen (Deutsch / Englisch / Tschechisch) |
 | Persönlicher Stil | Optionaler Markdown-Leitfaden; greift nur beim Umformulieren, leer = generisch |

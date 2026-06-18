@@ -6,6 +6,7 @@ public enum ClapActionKind
     Summarize,
     Explain,
     Rephrase,
+    Proofread,
     AnalyzeImage,
 }
 
@@ -18,6 +19,7 @@ public sealed record ClapAction(ClapActionKind Kind, string? Parameter = null)
         ClapActionKind.Summarize => "Zusammenfassen",
         ClapActionKind.Explain => "Erklären",
         ClapActionKind.Rephrase => $"Umformulieren ({Parameter})",
+        ClapActionKind.Proofread => "Rechtschreibung & Grammatik korrigieren",
         ClapActionKind.AnalyzeImage => "Bild analysieren",
         _ => Kind.ToString(),
     };
