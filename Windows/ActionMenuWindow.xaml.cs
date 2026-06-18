@@ -34,6 +34,9 @@ public partial class ActionMenuWindow : Window
             AddItem(new ClapAction(ClapActionKind.Summarize));
             AddItem(new ClapAction(ClapActionKind.Explain));
 
+            AddSection("Korrigieren");
+            AddItem(new ClapAction(ClapActionKind.Proofread));
+
             AddSection("Umformulieren");
             AddItem(new ClapAction(ClapActionKind.Rephrase, "formell"));
             AddItem(new ClapAction(ClapActionKind.Rephrase, "vereinfacht"));

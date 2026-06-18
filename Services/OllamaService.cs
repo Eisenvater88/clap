@@ -227,6 +227,13 @@ public sealed class OllamaService
                 "müssen fehlerfrei sein. Behalte die Sprache des Originals bei. " +
                 "Gib ausschließlich den umformulierten Text aus, ohne Erklärungen.",
 
+            ClapActionKind.Proofread =>
+                "Korrigiere im folgenden Text ausschließlich Rechtschreibung, Grammatik und Zeichensetzung. " +
+                "Formuliere NICHT um: Wortwahl, Satzbau, Stil, Ton und Bedeutung bleiben unverändert. " +
+                "Ändere nur, was eindeutig fehlerhaft ist; ist der Text bereits korrekt, gib ihn unverändert zurück. " +
+                "Behalte die Sprache und Formatierung des Originals bei. " +
+                "Gib ausschließlich den korrigierten Text aus, ohne Erklärungen oder Anmerkungen.",
+
             _ => throw new ArgumentOutOfRangeException(nameof(action)),
         };
 
