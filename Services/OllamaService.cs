@@ -158,7 +158,7 @@ public sealed class OllamaService
         return payload;
     }
 
-    private static string ExtractError(string body)
+    internal static string ExtractError(string body)
     {
         try
         {
@@ -169,7 +169,7 @@ public sealed class OllamaService
         return string.IsNullOrWhiteSpace(body) ? "Unbekannter Fehler." : body;
     }
 
-    private (string Model, string System, string UserText, string? ImageBase64) BuildRequest(
+    internal (string Model, string System, string UserText, string? ImageBase64) BuildRequest(
         ClapAction action, CaptureResult capture)
     {
         var settings = _settingsService.Settings;
@@ -288,7 +288,7 @@ public sealed class OllamaService
     /// Moderne Ollama-Versionen trennen „thinking" bereits ab; dieser Filter ist eine
     /// robuste Absicherung und arbeitet auch über Chunk-Grenzen hinweg korrekt.
     /// </summary>
-    private sealed class ThinkFilter
+    internal sealed class ThinkFilter
     {
         private const string Open = "<think>";
         private const string Close = "</think>";

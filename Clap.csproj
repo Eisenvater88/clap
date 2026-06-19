@@ -27,6 +27,15 @@
     <Using Remove="System.Drawing" />
   </ItemGroup>
 
+  <!-- Das Testprojekt liegt unter tests/ im selben Verzeichnisbaum. Das WPF-SDK würde dessen
+       .cs-Dateien sonst automatisch in den App-Build aufnehmen — hier ausschließen. -->
+  <ItemGroup>
+    <Compile Remove="tests\**" />
+    <Page Remove="tests\**" />
+    <None Remove="tests\**" />
+    <ApplicationDefinition Remove="tests\**" />
+  </ItemGroup>
+
   <!-- Keine externen Pakete: Ollama wird per HttpClient + System.Text.Json (im .NET-Framework enthalten) angesprochen. -->
 
 </Project>

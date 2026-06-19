@@ -10,7 +10,7 @@ public sealed class SettingsService
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Clap");
     private static readonly string SettingsPath = Path.Combine(SettingsDir, "settings.json");
 
-    public AppSettings Settings { get; private set; } = new();
+    public AppSettings Settings { get; internal set; } = new();
 
     public event Action? SettingsChanged;
 
@@ -30,12 +30,19 @@ public sealed class SettingsService
             service.Settings = new();
         }
 
-        // Migration: ein alter Anthropic-Modellname ist für Ollama ungültig → zurücksetzen,
-        // damit beim ersten Start ein lokales Modell ausgewählt wird.
-        if (service.Settings.Model.StartsWith("claude", StringComparison.OrdinalIgnoreCase))
-            service.Settings.Model = "";
-
+        ApplyMigrations(service.Settings);
         return service;
+    }
+
+    /// <summary>
+    /// Passt geladene Einstellungen an aktuelle Annahmen an. Aktuell: ein alter
+    /// Anthropic-Modellname ("claude…") ist für Ollama ungültig → zurücksetzen, damit
+    /// beim ersten Start ein lokales Modell ausgewählt wird.
+    /// </summary>
+    internal static void ApplyMigrations(AppSettings settings)
+    {
+        if (settings.Model.StartsWith("claude", StringComparison.OrdinalIgnoreCase))
+            settings.Model = "";
     }
 
     public void Save()
