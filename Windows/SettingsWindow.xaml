@@ -56,6 +56,15 @@
         <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,14"
                    Text="Als Markdown hinterlegen, z. B. bevorzugte Wortwahl, typische Formulierungen und Wörter, die nie genutzt werden sollen. Diese Vorgaben fließen nur in die Umformulieren-Aktionen ein, nicht ins Übersetzen."/>
 
+        <TextBlock Text="Ausgabeformat" Style="{StaticResource Heading}"/>
+        <ComboBox x:Name="OutputFormatBox" Margin="0,0,0,2">
+            <ComboBoxItem Content="Klartext (ohne Markdown)" Tag="PlainText"/>
+            <ComboBoxItem Content="Klartext mit Struktur (Aufzählungen bleiben)" Tag="SimpleStructure"/>
+            <ComboBoxItem Content="Markdown (Formatierung beibehalten)" Tag="Markdown"/>
+        </ComboBox>
+        <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,14"
+                   Text="Bestimmt, ob KI-Antworten Markdown (fett, kursiv, Überschriften) enthalten dürfen. Für sauberes Copy &amp; Paste in andere Programme „Klartext&quot; wählen."/>
+
         <TextBlock Text="Shortcut" Style="{StaticResource Heading}"/>
         <ComboBox x:Name="HotkeyBox" Margin="0,0,0,2"/>
         <TextBlock Style="{StaticResource Caption}" Margin="0,0,0,14"

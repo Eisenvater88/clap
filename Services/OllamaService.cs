@@ -61,6 +61,7 @@ public sealed class OllamaService
         using var reader = new StreamReader(stream, Encoding.UTF8);
 
         var thinkFilter = new ThinkFilter();
+        var stripper = new MarkdownStripper(_settingsService.Settings.OutputFormat);
         while (await reader.ReadLineAsync(ct) is { } line)
         {
             if (line.Length == 0) continue;
@@ -72,14 +73,25 @@ public sealed class OllamaService
             if (chunk?.Message?.Content is { Length: > 0 } content)
             {
                 var visible = thinkFilter.Process(content);
-                if (visible.Length > 0) yield return visible;
+                if (visible.Length > 0)
+                {
+                    var formatted = stripper.Process(visible);
+                    if (formatted.Length > 0) yield return formatted;
+                }
             }
 
             if (chunk?.Done == true) break;
         }
 
         var tail = thinkFilter.Flush();
-        if (tail.Length > 0) yield return tail;
+        if (tail.Length > 0)
+        {
+            var formattedTail = stripper.Process(tail);
+            if (formattedTail.Length > 0) yield return formattedTail;
+        }
+
+        var stripperTail = stripper.Flush();
+        if (stripperTail.Length > 0) yield return stripperTail;
     }
 
     /// <summary>

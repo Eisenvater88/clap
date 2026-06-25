@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using Clap.Models;
 using Clap.Services;
 
 namespace Clap.Windows;
@@ -22,6 +23,8 @@ public partial class SettingsWindow : Window
         VisionModelBox.Text = settings.VisionModel;
 
         SelectByContent(LanguageBox, settings.TargetLanguage);
+
+        SelectByTag(OutputFormatBox, settings.OutputFormat.ToString());
 
         StyleGuideBox.Text = settings.RephraseStyleGuide;
 
@@ -80,6 +83,15 @@ public partial class SettingsWindow : Window
         }
     }
 
+    private static void SelectByTag(ComboBox box, string tag)
+    {
+        box.SelectedIndex = 0;
+        foreach (ComboBoxItem item in box.Items)
+        {
+            if ((string?)item.Tag == tag) { box.SelectedItem = item; return; }
+        }
+    }
+
     private void OnSaveClick(object sender, RoutedEventArgs e)
     {
         var settings = _settingsService.Settings;
@@ -105,6 +117,8 @@ public partial class SettingsWindow : Window
         settings.VisionModel = VisionModelBox.Text.Trim();
         settings.TargetLanguage = (string)((ComboBoxItem)LanguageBox.SelectedItem).Content;
         settings.RephraseStyleGuide = StyleGuideBox.Text.Trim();
+        if (Enum.TryParse<OutputFormat>((string?)((ComboBoxItem)OutputFormatBox.SelectedItem).Tag, out var outputFormat))
+            settings.OutputFormat = outputFormat;
         settings.Hotkey = (string)((ComboBoxItem)HotkeyBox.SelectedItem).Content;
         settings.Autostart = AutostartBox.IsChecked == true;
 
