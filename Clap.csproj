@@ -12,16 +12,28 @@
     <Version>0.1</Version>
   </PropertyGroup>
 
+  <!-- Self-contained Deployment: .NET-Runtime wird mitgeliefert, Zielrechner braucht kein installiertes .NET.
+       Ergebnis ist eine einzelne Clap.exe. Greift nur beim 'dotnet publish'. -->
+  <PropertyGroup>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+  </PropertyGroup>
+
   <ItemGroup>
     <!-- WinForms wird nur für das NotifyIcon (Tray) genutzt — implizites Using vermeidet Namenskonflikte mit WPF -->
     <Using Remove="System.Windows.Forms" />
     <Using Remove="System.Drawing" />
   </ItemGroup>
 
+  <!-- Das Testprojekt liegt unter tests/ im selben Verzeichnisbaum. Das WPF-SDK würde dessen
+       .cs-Dateien sonst automatisch in den App-Build aufnehmen — hier ausschließen. -->
   <ItemGroup>
-    <!-- Das Testprojekt liegt unter tests/ und darf nicht in die Haupt-App kompiliert werden
-         (verschachtelte obj/-Ordner würden sonst doppelte Assembly-Attribute verursachen). -->
-    <Compile Remove="tests/**/*.cs" />
+    <Compile Remove="tests\**" />
+    <Page Remove="tests\**" />
+    <None Remove="tests\**" />
+    <ApplicationDefinition Remove="tests\**" />
   </ItemGroup>
 
   <!-- Keine externen Pakete: Ollama wird per HttpClient + System.Text.Json (im .NET-Framework enthalten) angesprochen. -->
