@@ -29,7 +29,7 @@ wiederhergestellt — vorhandene Inhalte gehen nicht verloren.
 3. Beim ersten Start öffnen sich die Einstellungen:
    - **Ollama-Server** prüfen (lokal `http://localhost:11434`) → „Verbinden" lädt die installierten Modelle
    - **Textmodell** wählen, optional **Vision-Modell**
-4. Optional: Zielsprache, Shortcut und Autostart anpassen
+4. Optional: Zielsprache, Ausgabeformat, Shortcut und Autostart anpassen
 
 ### Persönlicher Stil für Umformulieren (optional)
 
@@ -51,6 +51,22 @@ Beispiel:
 
 Das Feld leer lassen, um den generischen Stil beizubehalten.
 
+### Ausgabeformat (Markdown / Klartext)
+
+Über die Einstellung **„Ausgabeformat"** lässt sich steuern, wie viel
+Markdown-Formatierung die KI-Antwort enthält – praktisch für Copy-und-Paste in
+Programme, die Markdown nicht interpretieren (E-Mails, Ticketsysteme, Office, Chats)
+und sonst Zeichen wie `**` oder `#` sichtbar einfügen:
+
+- **Klartext (ohne Markdown)** – *Standard*: Fett, Kursiv, Überschriften, Links und
+  Aufzählungszeichen werden entfernt; es bleibt gut lesbarer Klartext.
+- **Klartext mit Struktur** – Aufzählungen und Absätze bleiben erhalten, nur Fett,
+  Kursiv und Überschriften werden entfernt.
+- **Markdown (Formatierung beibehalten)** – die Antwort wird unverändert ausgegeben.
+
+Die Umwandlung erfolgt rein auf der Ausgabe (kein Eingriff in den Prompt) und wirkt
+auf **alle** Aktionen. Hotkey, Zwischenablage und Anzeige bleiben unverändert.
+
 ### Korrigieren vs. Umformulieren
 
 Die Aktion **„Rechtschreibung & Grammatik korrigieren"** ändert ausschließlich
@@ -68,6 +84,7 @@ nicht beim Korrigieren.
 | Textmodell | Modell für Übersetzen/Zusammenfassen/Erklären/Korrigieren/Umformulieren |
 | Vision-Modell | Optional für Bildanalyse; leer = Funktion ausgeblendet |
 | Zielsprache | Standardziel für Übersetzungen (Deutsch / Englisch / Tschechisch) |
+| Ausgabeformat | Klartext (Standard) / Klartext mit Struktur / Markdown – entfernt bei Bedarf Markdown für sauberes Copy & Paste |
 | Persönlicher Stil | Optionaler Markdown-Leitfaden; greift nur beim Umformulieren, leer = generisch |
 | Shortcut | Strg+Win+C / Strg+Alt+C / Strg+Win+Y mit automatischem Fallback |
 | Autostart | Start mit Windows-Login (HKCU-Run-Key, keine Adminrechte nötig) |

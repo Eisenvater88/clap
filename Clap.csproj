@@ -18,6 +18,12 @@
     <Using Remove="System.Drawing" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Das Testprojekt liegt unter tests/ und darf nicht in die Haupt-App kompiliert werden
+         (verschachtelte obj/-Ordner würden sonst doppelte Assembly-Attribute verursachen). -->
+    <Compile Remove="tests/**/*.cs" />
+  </ItemGroup>
+
   <!-- Keine externen Pakete: Ollama wird per HttpClient + System.Text.Json (im .NET-Framework enthalten) angesprochen. -->
 
 </Project>

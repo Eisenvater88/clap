@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Clap.Models;
 
 public sealed class AppSettings
@@ -28,6 +30,14 @@ public sealed class AppSettings
     /// Zusammenfassen, Erklären oder bei der Bildanalyse. Leer = generischer Stil.
     /// </summary>
     public string RephraseStyleGuide { get; set; } = "";
+
+    /// <summary>
+    /// Ausgabeformat der KI-Antworten. Standard ist <see cref="OutputFormat.PlainText"/>,
+    /// weil der Hauptanwendungsfall das Einfügen per Copy &amp; Paste in Programme ist, die
+    /// Markdown nicht interpretieren. Wird als lesbarer Name in der settings.json gespeichert.
+    /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public OutputFormat OutputFormat { get; set; } = OutputFormat.PlainText;
 
     /// <summary>Bevorzugter globaler Shortcut (Name aus HotkeyService.Options).</summary>
     public string Hotkey { get; set; } = "Strg+Win+C";
