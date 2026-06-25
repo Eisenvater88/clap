@@ -9,7 +9,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyTitle>Clap – KI-Assistent</AssemblyTitle>
     <Product>Clap</Product>
-    <Version>0.1</Version>
+    <Version>0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
