@@ -9,7 +9,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyTitle>Clap – KI-Assistent</AssemblyTitle>
     <Product>Clap</Product>
-    <Version>0.1</Version>
+    <Version>0.3</Version>
   </PropertyGroup>
 
   <!-- Self-contained Deployment: .NET-Runtime wird mitgeliefert, Zielrechner braucht kein installiertes .NET.
