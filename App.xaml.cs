@@ -64,9 +64,7 @@ public partial class App : Application
         }
         else if (_hotkeyService.ActiveHotkeyName is { } activeHotkey)
         {
-            _trayIcon.ShowNotification("Clap ist bereit",
-                $"Text markieren und {activeHotkey} drücken, um den KI-Assistenten zu öffnen.");
-            _ = CheckServerAsync();
+            _ = CheckServerAsync(activeHotkey);
         }
 
         // Nach dem Start ungenutzten Speicher freigeben (Hintergrund-Betrieb)
@@ -142,7 +140,7 @@ public partial class App : Application
         }
     }
 
-    private async Task CheckServerAsync()
+    private async Task CheckServerAsync(string activeHotkey)
     {
         if (_trayIcon is null) return;
         var models = await _aiService.GetModelsAsync();
@@ -151,7 +149,11 @@ public partial class App : Application
             _trayIcon.ShowNotification("Clap",
                 $"Der Ollama-Server unter {_settingsService.Settings.OllamaUrl} ist nicht erreichbar. " +
                 "Bitte Ollama starten oder die URL in den Einstellungen prüfen.", isError: true);
+            return;
         }
+
+        _trayIcon.ShowNotification("Clap ist bereit",
+            $"Text markieren und {activeHotkey} drücken, um den KI-Assistenten zu öffnen.");
     }
 
     private void ShowResult(ClapAction action, CaptureResult capture)
